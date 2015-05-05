@@ -1,0 +1,261 @@
+// out: ., compress: false
+
+.module-editor .editor-container .editor-box .codetools_colorpicker {
+	position: absolute;
+	opacity: 0.9;
+	border: 1px solid #d9cb89;
+	background-color: #81741C;
+	border-radius: 6px;
+	z-index: 2000;
+	padding: 0 2px 0 2px;
+	color: #ffffff;
+}
+
+.module-editor .editor-container .editor-colorpicker {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 70;
+	background: #384248;
+	border-radius: 3px;
+	display: none;
+	
+	.arrow {
+		position: absolute;
+		left: -7px;
+		top: 0;
+		border-right: 7px solid #384248;
+		border-top: 7px solid transparent;
+		border-bottom: 7px solid transparent;
+	}
+	
+	.color-list {
+		padding: 0 10px 0 10px;
+		color: #202020;
+		line-height: 20px;
+		
+		span.color {
+			margin-right: 5px;
+			margin-bottom: 5px;
+			width: 20px;
+			height: 20px;
+			border-radius: 2px;
+			display: inline-block;
+			cursor: pointer;
+			box-sizing: border-box;
+			background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
+			
+			span {
+				width: 100%;
+				height: 100%;
+				display: block;
+				border-radius: 2px;
+			}
+		}
+	}
+	
+	.colorpicker {
+		position: relative;
+		-webkit-user-select: none;
+		-moz-user-select: -moz-none;
+		-o-user-select: none;
+		user-select: none;
+		padding: 10px;
+		*zoom: 1;
+		width: 290px;
+		
+		&:after {
+			clear: both;
+			content: '';
+			display: block;
+		}
+		
+		.sp-palette-container {
+			display: none;
+		}
+		
+		.picker {
+			float: left;
+			width: 200px;
+			position: relative;
+			
+			.picker-color {
+				position: relative;
+				float: left;
+				width: 150px;
+				height: 150px;
+				cursor: pointer;
+				border-radius: 2px;
+			}
+			
+			.picker-sat {
+				position: relative;
+				width: 100%;
+				height: 100%;
+				background-image: -webkit-gradient(linear, 0 0, 100% 0, from(#FFF), to(rgba(204, 154, 129, 0)));
+				background-image: -webkit-linear-gradient(left, #FFF, rgba(204, 154, 129, 0));
+				background-image: -moz-linear-gradient(left, #fff, rgba(204, 154, 129, 0));
+				background-image: -o-linear-gradient(left, #fff, rgba(204, 154, 129, 0));
+				background-image: -ms-linear-gradient(left, #fff, rgba(204, 154, 129, 0));
+				background-image: linear-gradient(to right, #fff, rgba(204, 154, 129, 0));
+				border-radius: 2px;
+			}
+			.picker-val {
+				position: relative;
+				width: 100%;
+				height: 100%;
+				background-image: -webkit-gradient(linear, 0 100%, 0 0, from(#000000), to(rgba(204, 154, 129, 0)));
+				background-image: -webkit-linear-gradient(bottom, #000000, rgba(204, 154, 129, 0));
+				background-image: -moz-linear-gradient(bottom, #000, rgba(204, 154, 129, 0));
+				background-image: -o-linear-gradient(bottom, #000, rgba(204, 154, 129, 0));
+				background-image: -ms-linear-gradient(bottom, #000, rgba(204, 154, 129, 0));
+				background-image: linear-gradient(to top, #000, rgba(204, 154, 129, 0));
+				border-radius: 2px;
+			}
+			.picker-hue {
+				position: relative;
+				float: right;
+				width: 40px;
+				height: 150px;
+				background: -moz-linear-gradient(top, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+				background: -ms-linear-gradient(top, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+				background: -o-linear-gradient(top, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+				background: -webkit-gradient(linear, left top, left bottom, from(#ff0000), color-stop(0.17, #ffff00), color-stop(0.33, #00ff00), color-stop(0.5, #00ffff), color-stop(0.67, #0000ff), color-stop(0.83, #ff00ff), to(#ff0000));
+				background: -webkit-linear-gradient(top, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+				background: linear-gradient(to bottom, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%);
+				border-radius: 2px;
+				cursor: pointer;
+			}
+			
+			.picker-dragger {
+				border-radius: 5px;
+				height: 5px;
+				width: 5px;
+				border: 1px solid #fff;
+				background: #000;
+				cursor: pointer;
+				position: absolute;
+				top: 0;
+				left: 0;
+				margin-left: 1px;
+				margin-top: 1px;
+			}
+			.picker-slider {
+				position: absolute;
+				top: 0;
+				cursor: pointer;
+				height: 3px;
+				left: -1px;
+				right: -1px;
+				border: 1px solid #000000;
+				background: white;
+				opacity: .8;
+				border-radius: 2px;
+			}
+			
+			.alpha-clear {
+				clear: both;
+				height: 10px;
+			}
+			
+			.alpha {
+				position: relative;
+				background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
+				border-radius: 2px;
+				cursor: pointer;
+				
+				.alpha-inner {
+					display: block;
+					position: relative;
+					height: 20px;
+					border-radius: 2px;
+					
+					.alpha-handle {
+						position: absolute;
+						top: -1px;
+						bottom: -1px;
+						width: 6px;
+						left: 50%;
+						cursor: pointer;
+						border: 1px solid black;
+						background: white;
+						opacity: .8;
+						border-radius: 2px;
+					}
+				}
+			}
+		}
+		
+		.inputs {
+			float: right;
+			width: 80px;
+			position: relative;
+			
+			.color-compare {
+				height: 30px;
+				box-sizing: border-box;
+				margin-top: 6px;
+				border-radius: 2px;
+				overflow: hidden;
+				position: absolute;
+				width: 100%;
+				border: 1px solid #000000;
+				
+				div > span {
+					display: block;
+					float: left;
+					width: 50%;
+					height: 29px;
+					
+					& > span {
+						display: block;
+						width: 100%;
+						height: 100%;
+					}
+				}
+			}
+			
+			.input {
+				font-size: 13px;
+				color: #c2c2c2;
+				line-height: 24px;
+				margin-bottom: 5px;
+				
+				input {
+					float: right;
+					width: 60px;
+					background: #676F74;
+					border-radius: 2px;
+					display: block;
+					height: 24px;
+					text-align: center;
+					color: #444D53;
+					padding: 0 4px;
+					box-sizing: border-box;
+					font-size: 13px;
+				}
+			}
+		}
+	}
+}
+
+.light {
+	.module-editor .editor-container .editor-colorpicker {
+		background: #ffffff;
+		border: 1px solid #dfdfdf;
+		
+		.arrow {
+			border-right-color: #dfdfdf;
+		}
+		
+		.colorpicker .inputs {
+			.color-compare {
+				border-color: #dfdfdf;
+			}
+			
+			.input input {
+				background: #ececec;
+			}
+		}
+	}
+}
