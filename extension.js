@@ -176,7 +176,7 @@ define(function(require, exports, module) {
 				var editor = e.editor;
 
 				var line = doc.getLine(1);
-				if (["css", "svg", "less", "stylus"].indexOf(sess.mode) === -1 &&
+				if (["css", "svg", "less", "scss", "stylus"].indexOf(sess.mode) === -1 &&
 					SyntaxDetector.getContextSyntax(doc, pos, sess.mode) !== "css" &&
 					(!line || line.indexOf("<a:skin") === -1)) {
 					if (sess.mode == 'php' || sess.mode == 'html') {
@@ -209,7 +209,7 @@ define(function(require, exports, module) {
 				var editor = e.editor;
 				var line = doc.getLine(1);
 
-				if (["css", "svg", "less", "stylus"].indexOf(sess.mode) === -1 &&
+				if (["css", "svg", "less", "scss", "stylus"].indexOf(sess.mode) === -1 &&
 					SyntaxDetector.getContextSyntax(doc, pos, sess.mode) !== "css" &&
 					(!line || line.indexOf("<a:skin") === -1)) {
 					return;
