@@ -216,6 +216,11 @@
 			clearButton = container.find(".sp-clear"),
 			chooseButton = container.find(".sp-choose"),
 			toggleButton = container.find(".sp-palette-toggle"),
+			colorR = container.find('.inputs .input[data-val="r"] input'),
+			colorG = container.find('.inputs .input[data-val="g"] input'),
+			colorB = container.find('.inputs .input[data-val="b"] input'),
+			colorA = container.find('.inputs .input[data-val="a"] input'),
+			colorHex = container.find('.inputs .input[data-val="hex"] input'),
 			isInput = boundElement.is("input"),
 			isInputTypeColor = isInput && boundElement.attr("type") === "color" && inputTypeColorSupport(),
 			shouldReplace = isInput && !flat,
@@ -322,6 +327,36 @@
 				if (e.keyCode == 13) {
 					setFromTextInput();
 				}
+			});
+			
+			var onInputChange = function() {
+				var r = parseInt(colorR.val()) || 0;
+				var g = parseInt(colorG.val()) || 0;
+				var b = parseInt(colorB.val()) || 0;
+				var a = parseFloat(colorA.val()) || 0;
+				
+				var val = 'rgba(' + r + ', ' + g + ', ' + b + ',  ' + a + ')';
+				
+				set(val);
+				move();
+			};
+			
+			colorR.on('input', onInputChange);
+			colorG.on('input', onInputChange);
+			colorB.on('input', onInputChange);
+			colorA.on('change', onInputChange);
+			
+			colorHex.on('change', function() {
+				var hex = $(this).val().replace('#','');
+				var r = parseInt(hex.substring(0,2), 16) || 0;
+				var g = parseInt(hex.substring(2,4), 16) || 0;
+				var b = parseInt(hex.substring(4,6), 16) || 0;
+				var a = parseFloat(colorA.val()) || 0;
+				
+				var val = 'rgba(' + r + ', ' + g + ', ' + b + ',  ' + a + ')';
+				
+				set(val);
+				move();
 			});
 
 			cancelButton.text(opts.cancelText);

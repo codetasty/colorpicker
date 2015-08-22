@@ -1,19 +1,19 @@
 .module-editor .editor-container .editor-box .codetools_colorpicker {
   position: absolute;
-  opacity: 0.9;
   border: 1px solid #d9cb89;
   background-color: #81741C;
-  border-radius: 6px;
+  border-radius: 2px;
+  opacity: 0.5;
+  margin-top: -1px;
   z-index: 2000;
-  padding: 0 2px 0 2px;
-  color: #ffffff;
 }
 .module-editor .editor-container .editor-colorpicker {
   position: absolute;
   top: 0;
   left: 0;
   z-index: 70;
-  background: #384248;
+  background: #1E1C21;
+  border: 1px solid #423748;
   border-radius: 3px;
   display: none;
 }
@@ -21,7 +21,8 @@
   position: absolute;
   left: -7px;
   top: 0;
-  border-right: 7px solid #384248;
+  margin-top: 2px;
+  border-right: 7px solid #423748;
   border-top: 7px solid transparent;
   border-bottom: 7px solid transparent;
 }
@@ -29,16 +30,25 @@
   padding: 0 10px 0 10px;
   color: #202020;
   line-height: 20px;
+  width: 300px;
+}
+.module-editor .editor-container .editor-colorpicker .color-list:after {
+  clear: both;
+  content: '';
+  display: block;
+  height: 4px;
 }
 .module-editor .editor-container .editor-colorpicker .color-list span.color {
-  margin-right: 5px;
-  margin-bottom: 5px;
-  width: 20px;
-  height: 20px;
-  border-radius: 2px;
-  display: inline-block;
+  margin-right: 3px;
+  margin-bottom: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  display: block;
+  float: left;
   cursor: pointer;
   box-sizing: border-box;
+  border: 1px solid #000000;
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAIAAADZF8uwAAAAGUlEQVQYV2M4gwH+YwCGIasIUwhT25BVBADtzYNYrHvv4gAAAABJRU5ErkJggg==);
 }
 .module-editor .editor-container .editor-colorpicker .color-list span.color span {
@@ -175,9 +185,9 @@
   position: relative;
 }
 .module-editor .editor-container .editor-colorpicker .colorpicker .inputs .color-compare {
-  height: 30px;
+  height: 22px;
   box-sizing: border-box;
-  margin-top: 6px;
+  margin-top: 14px;
   border-radius: 2px;
   overflow: hidden;
   position: absolute;
@@ -204,12 +214,12 @@
 .module-editor .editor-container .editor-colorpicker .colorpicker .inputs .input input {
   float: right;
   width: 60px;
-  background: #676F74;
-  border-radius: 2px;
+  background: transparent;
+  border-bottom: 2px solid #353338;
   display: block;
   height: 24px;
   text-align: center;
-  color: #444D53;
+  color: #ffffff;
   padding: 0 4px;
   box-sizing: border-box;
   font-size: 13px;
@@ -221,9 +231,13 @@
 .light .module-editor .editor-container .editor-colorpicker .arrow {
   border-right-color: #dfdfdf;
 }
+.light .module-editor .editor-container .editor-colorpicker .color-list span.color {
+  border-width: 0;
+}
 .light .module-editor .editor-container .editor-colorpicker .colorpicker .inputs .color-compare {
   border-color: #dfdfdf;
 }
 .light .module-editor .editor-container .editor-colorpicker .colorpicker .inputs .input input {
-  background: #ececec;
+  border-color: #ececec;
+  color: #303030;
 }

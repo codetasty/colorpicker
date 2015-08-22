@@ -293,6 +293,7 @@ define(function(require, exports, module) {
 			var markers = [];
 			colors.forEach(function(color) {
 				var id = markerId || color.replace(/[\(\)\,\.]/gi, '-').replace(/\s+/gi, '') + (pos.row + "") + pos.column;
+				
 				var marker = self._colors[id];
 				// the tooltip DOM node is stored in the third element of the selection array
 				if (!marker) {
@@ -302,7 +303,7 @@ define(function(require, exports, module) {
 					}
 					
 					var found = false;
-					for (var i in this._colors) {
+					for (var i in self._colors) {
 						if (self.activeColor == i && self._colors[i][0].start.column == range.start.column && self._colors[i][0].start.row == range.start.row) {
 							found = true;
 						}
@@ -312,14 +313,7 @@ define(function(require, exports, module) {
 						return;
 					}
 					
-					marker = editor.session.addMarker(range, "codetools_colorpicker", function(stringBuilder, range, left, top, viewport) {
-						stringBuilder.push(
-							"<span class='codetools_colorpicker' id='colorpicker" + id.replace(/^\#/, '') + "' style='",
-							"left:", left - 3, "px;",
-							"top:", top - 1, "px;",
-							"height:", viewport.lineHeight, "px;'", (markerId ? " id='" + markerId + "'" : ""), ">", color, "</span>"
-						);
-					}, true);
+					marker = editor.session.addMarker(range, "codetools_colorpicker", "selection");
 					self._colors[id] = [range, marker, editor.session];
 					self.lastActive = id;
 				}
@@ -511,7 +505,7 @@ define(function(require, exports, module) {
 
 			var out = [];
 			var parsed;
-			for (i = 0, l = Math.min(colors.length, 11); i < l; ++i) {
+			for (i = 0, l = Math.min(colors.length, 28); i < l; ++i) {
 				out.push('<span class="color" data-color="', colors[i], '" title="', colors[i], '"><span style="background-color: ', colors[i], '"></span></span>');
 			}
 			$(this.elem).find('.color-list').html(out.join(""));
@@ -529,42 +523,12 @@ define(function(require, exports, module) {
 			clearTimeout(this.$colorPickTimer);
 			var doc = a.editor.session.doc;
 			var line = doc.getLine(a.pos.row);
-			if (typeof a.markerNode == "string") {
-				var node = document.getElementById(a.markerNode);
-				if (node)
-					a.markerNode = node;
-				else
-					return;
-			}
-			
-			// var newLine, newColor;
-			// if (a.color.type == "hex") {
-			// 	newColor = color;
-			// } else if (a.color.type == "rgb") {
-			// 	var m = a.current.match(Regexes.isRgb);
-			// 	var regex = new RegExp("(rgba?)\\(\\s*" + m[1] + "\\s*,\\s*" + m[2] + "\\s*,\\s*" + m[3] + "(\\s*,\\s*(?:1|0|0?\\.[0-9]{1,2})\\s*)?\\)", "i");
-			// 	if (!line.match(regex))
-			// 		return;
-			// 	var rgb = ColorHelper.hexToRGB(color);
-			// 	newLine = line.replace(regex, function(m, prefix, suffix) {
-			// 		return (newColor = prefix + "(" + rgb.r + ", " + rgb.g + ", " + rgb.b + (suffix || "") + ")");
-			// 	});
-			// } else if (a.color.type == "hsb") {
-			// 	var m = a.current.match(Regexes.isHsl);
-			// 	var regex = new RegExp("hsl\\(\\s*" + m[1] + "\\s*,\\s*" + m[2] + "\\s*,\\s*" + m[3] + "\\s*\\)", "i");
-			// 	if (!line.match(regex))
-			// 		return;
-			// 	var hsb = ColorHelper.hexToHSB(color);
-			// 	newLine = line.replace(regex, function() {
-			// 		return (newColor = "hsl(" + parseInt(hsb.h, 10) + ", " + parseInt(hsb.s, 10) + "%, " + parseInt(hsb.b, 10) + "%)");
-			// 	});
-			// }
 
 			a.markerNode.innerHTML = color;
 
 			this.$colorPickTimer = setTimeout(function() {
 				var range = self._createColorRange(a.pos.row, a.pos.column, line, a.current);
-				if (!range)
+				if (!range || !a.marker)
 					return;
 				a.marker[0] = range;
 				Extension.colorpickerChange = true;
