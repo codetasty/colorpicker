@@ -26,6 +26,12 @@
   border-top: 7px solid transparent;
   border-bottom: 7px solid transparent;
 }
+.module-editor .editor-container .editor-colorpicker.lefted .arrow {
+  left: auto;
+  right: -7px;
+  border-right: 0;
+  border-left: 7px solid #423748;
+}
 .module-editor .editor-container .editor-colorpicker .color-list {
   padding: 0 10px 0 10px;
   color: #202020;

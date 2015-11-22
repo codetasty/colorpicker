@@ -562,9 +562,13 @@ define(function(require, exports, module) {
 			y = y < 5 ? 5 : y;
 			y = y > (window.innerHeight - $('.statusbar').height() - $(this.elem).height() - 5) ? (window.innerHeight - $('.statusbar').height() - $(this.elem).height() - 5) : y;
 			
-			$(elem).css({top: y});
-			$(elem).css({left: x});
-			$(elem).find('.arrow').css({top: coordsEnd.pageY-y-48});
+			
+			$(elem).removeClass('lefted').css({top: y, left: x})
+			.find('.arrow').css({top: coordsEnd.pageY-y-48});
+			
+			if ($('.modules .modules-container').width() < ($(elem).offset().left + $(elem).width())) {
+				$(elem).addClass('lefted').css({left: coordsStart.pageX - $(elem).width() - $(Editor.elem).find('.editor-explorer').width() - 5});
+			}
 		},
 		destroy: function() {
 			this.hideColorPicker();
