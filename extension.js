@@ -177,7 +177,7 @@ define(function(require, exports, module) {
 
 				var line = doc.getLine(1);
 				if (["css", "svg", "less", "scss", "stylus"].indexOf(sess.mode) === -1 &&
-					SyntaxDetector.getContextSyntax(doc, pos, sess.mode) !== "css" &&
+					SyntaxDetector.getContextSyntax(sess.data, pos, sess.mode) !== "css" &&
 					(!line || line.indexOf("<a:skin") === -1)) {
 					if (sess.mode == 'php' || sess.mode == 'html') {
 						self.hideColorTooltips(editor);
@@ -210,7 +210,7 @@ define(function(require, exports, module) {
 				var line = doc.getLine(1);
 
 				if (["css", "svg", "less", "scss", "stylus"].indexOf(sess.mode) === -1 &&
-					SyntaxDetector.getContextSyntax(doc, pos, sess.mode) !== "css" &&
+					SyntaxDetector.getContextSyntax(sess.data, pos, sess.mode) !== "css" &&
 					(!line || line.indexOf("<a:skin") === -1)) {
 					return;
 				}
