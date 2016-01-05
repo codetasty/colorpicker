@@ -535,7 +535,7 @@ define(function(require, exports, module) {
 				range.end = doc.replace(range, color);
 				Extension.colorpickerChange = false;
 				a.current = color;
-			}, 200);
+			}, 100);
 		},
 		resize: function(color) {
 			if (!$(this.elem).is(':visible')) {
