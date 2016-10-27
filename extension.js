@@ -546,7 +546,7 @@ define(function(require, exports, module) {
 			var pos = a.pos;
 			var orig = a.color.orig;
 			var line = a.line;
-			var renderer = EditorEditors.getEditor(EditorSplit.active).renderer;
+			var renderer = EditorEditors.getEditor(EditorSplit.getActive()).renderer;
 			var cp = this.colorpicker;
 			var elem = this.elem;
 			
