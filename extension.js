@@ -1,9 +1,8 @@
 define(function(require, exports, module) {
-	var ExtensionManager = require('code/extensionManager');
+	var ExtensionManager = require('core/extensionManager');
 	
-	var Code = require('code/code');
-	var Workspace = require('code/workspace');
-	var Fn = require('code/fn');
+	var Workspace = require('core/workspace');
+	var Fn = require('core/fn');
 	
 	var Editor = require('modules/editor/editor');
 	
