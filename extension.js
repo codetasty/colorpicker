@@ -108,15 +108,16 @@ define(function(require, exports, module) {
 		lastActive: null,
 		activeColor: null,
 		colorpickerChange: false,
+		columnChangeTimer: null,
 		settingsChanged: function(data) {
 			
 		},
 		init: function() {
-			var colorpicker = $(Fn.template.parse('<div class="editor-colorpicker">\
-			<div class="arrow"></div>\
-			<div class="colorpicker-holder"></div>\
-			<div class="color-list"></div>\
-			</div>'));
+			var colorpicker = $('<div class="editor-colorpicker">\
+				<div class="arrow"></div>\
+				<div class="colorpicker-holder"></div>\
+				<div class="color-list"></div>\
+			</div>');
 			
 			$(Editor.elem).find('.editor-container-inner').append(colorpicker);
 			this.elem = $(colorpicker);
@@ -153,86 +154,104 @@ define(function(require, exports, module) {
 			});
 			
 			
-			var columnChangeTimer;
+			EditorEditors.on('codetools.beforechange', this.onBeforeChange);
+			EditorEditors.on('codetools.columnchange', this.onColumnChange);
+			EditorEditors.on('codetools.codeclick', this.onClick);
+			EditorEditors.on('codetools.codedblclick', this.onDblClick);
+		},
+		destroy: function() {
+			this.hideColorPicker();
 			
-			EditorEditors.on('codetools.beforechange', function(e) {
-				if (!Extension.colorpickerChange && $(Extension.elem).is(':visible')) {
-					Extension.hideColorPicker();
+			this.elem.spectrum('destroy');
+			this.elem.remove();
+			
+			this.picker = null;
+			this.elem = null;
+			this.lastActive = null;
+			this.activeColor = null;
+			this.colorpickerChange = false;
+			
+			EditorEditors.off('codetools.beforechange', this.onBeforeChange);
+			EditorEditors.off('codetools.columnchange', this.onColumnChange);
+			EditorEditors.off('codetools.codeclick', this.onClick);
+			EditorEditors.off('codetools.codedblclick', this.onDblClick);
+		},
+		onBeforeChange: function(e) {
+			if (!Extension.colorpickerChange && $(Extension.elem).is(':visible')) {
+				Extension.hideColorPicker();
+			}
+		},
+		onColumnChange: function(e) {
+			if (Extension.columnChangeTimer) {
+				clearTimeout(Extension.columnChangeTimer);
+			}
+			
+			var sess = EditorSession.sessions[EditorSession.getActive()];
+
+			if (!sess) {
+				return;
+			}
+
+			var doc = e.doc;
+			var pos = e.pos;
+			var editor = e.editor;
+
+			var line = doc.getLine(1);
+			if (["css", "svg", "less", "scss", "stylus"].indexOf(sess.mode) === -1 &&
+				SyntaxDetector.getContextSyntax(sess.data, pos, sess.mode) !== "css" &&
+				(!line || line.indexOf("<a:skin") === -1)) {
+				if (sess.mode == 'php' || sess.mode == 'html') {
+					Extension.hideColorTooltips(editor);
 				}
-			});
+				return;
+			}
 
-			EditorEditors.on("codetools.columnchange", function(e) {
-				clearTimeout(columnChangeTimer);
-				
-				var sess = EditorSession.sessions[EditorSession.getActive()];
+			line = doc.getLine(pos.row);
+			var range = editor.selection.getRange();
+			var colors = Extension._detectColors(pos, line);
+			if (colors[0] && colors[0].length && !(range.start.row !== range.end.row || range.start.column !== range.end.column)) {
+				Extension.showColorTooltip(pos, editor, line, colors[0]);
+			} else {
+				Extension.columnChangeTimer = setTimeout(function() {
+					Extension.hideColorTooltips(editor);
+				}, 100);
+			}
+		},
+		onClick: function(e) {
+			var sess = EditorSession.sessions[EditorSession.getActive()];
+			
+			if (!sess) {
+				return;
+			}
 
-				if (!sess) {
-					return;
-				}
+			var doc = e.doc;
+			var pos = e.pos;
+			var editor = e.editor;
+			var line = doc.getLine(1);
 
-				var doc = e.doc;
-				var pos = e.pos;
-				var editor = e.editor;
+			if (["css", "svg", "less", "scss", "stylus"].indexOf(sess.mode) === -1 &&
+				SyntaxDetector.getContextSyntax(sess.data, pos, sess.mode) !== "css" &&
+				(!line || line.indexOf("<a:skin") === -1)) {
+				return;
+			}
+			//do not show anything when a selection is made...
+			var range = editor.selection.getRange();
+			if (range.start.row !== range.end.row || range.start.column !== range.end.column) {
+				return;
+			}
 
-				var line = doc.getLine(1);
-				if (["css", "svg", "less", "scss", "stylus"].indexOf(sess.mode) === -1 &&
-					SyntaxDetector.getContextSyntax(sess.data, pos, sess.mode) !== "css" &&
-					(!line || line.indexOf("<a:skin") === -1)) {
-					if (sess.mode == 'php' || sess.mode == 'html') {
-						self.hideColorTooltips(editor);
-					}
-					return;
-				}
-
-				line = doc.getLine(pos.row);
-				var range = editor.selection.getRange();
-				var colors = self._detectColors(pos, line);
-				if (colors[0] && colors[0].length && !(range.start.row !== range.end.row || range.start.column !== range.end.column)) {
-					self.showColorTooltip(pos, editor, line, colors[0]);
-				} else {
-					columnChangeTimer = setTimeout(function() {
-						self.hideColorTooltips(editor);
-					}, 100);
-				}
-			});
-
-			EditorEditors.on("codetools.codeclick", function(e) {
-				var sess = EditorSession.sessions[EditorSession.getActive()];
-				
-				if (!sess) {
-					return;
-				}
-
-				var doc = e.doc;
-				var pos = e.pos;
-				var editor = e.editor;
-				var line = doc.getLine(1);
-
-				if (["css", "svg", "less", "scss", "stylus"].indexOf(sess.mode) === -1 &&
-					SyntaxDetector.getContextSyntax(sess.data, pos, sess.mode) !== "css" &&
-					(!line || line.indexOf("<a:skin") === -1)) {
-					return;
-				}
-				//do not show anything when a selection is made...
-				var range = editor.selection.getRange();
-				if (range.start.row !== range.end.row || range.start.column !== range.end.column) {
-					return;
-				}
-
-				line = doc.getLine(pos.row);
-				var colors = self._detectColors(pos, line);
-				if (colors[1]) {
-					self.activeColor = self.lastActive;
-					self.hideColorTooltips(editor);
-					self.toggleColorPicker(pos, editor, line, colors[1]);
-				} else if (self.elem && self.elem.visible) {
-					self.hideColorPicker(editor);
-				}
-			});
-
-			EditorEditors.on("codetools.codedblclick", function(e) {
-				self.hideColorTooltips(e.editor);
-			});
+			line = doc.getLine(pos.row);
+			var colors = Extension._detectColors(pos, line);
+			if (colors[1]) {
+				Extension.activeColor = Extension.lastActive;
+				Extension.hideColorTooltips(editor);
+				Extension.toggleColorPicker(pos, editor, line, colors[1]);
+			} else if (Extension.elem && Extension.elem.visible) {
+				Extension.hideColorPicker(editor);
+			}
+		},
+		onDblClick: function(e) {
+			Extension.hideColorTooltips(e.editor);
 		},
 		_detectColors: function(pos, line) {
 			var colors = line.match(Regexes.isColor);
@@ -568,11 +587,8 @@ define(function(require, exports, module) {
 			if ($('.modules .modules-container').width() < ($(elem).offset().left + $(elem).width())) {
 				$(elem).addClass('lefted').css({left: coordsStart.pageX - $(elem).width() - $(Editor.elem).find('.editor-explorer').width() - 5});
 			}
-		},
-		destroy: function() {
-			this.hideColorPicker();
 		}
 	});
 
-	module.exports = Extension;
+	module.exports = Extension.api();
 });
